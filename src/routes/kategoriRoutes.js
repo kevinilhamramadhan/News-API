@@ -9,13 +9,16 @@ const {
   updateKategori,
   deleteKategori
 } = require('../controllers/kategoriController');
+const { requireAdmin } = require('../middleware/authMiddleware');
 
-// Routes untuk kategori
+// Public routes (GET - anyone can read)
 router.get('/', getAllKategori);
 router.get('/:id', getKategoriById);
 router.get('/slug/:slug', getKategoriBySlug);
-router.post('/', createKategori);
-router.put('/:id', updateKategori);
-router.delete('/:id', deleteKategori);
+
+// Protected routes (POST, PUT, DELETE - admin only)
+router.post('/', requireAdmin, createKategori);
+router.put('/:id', requireAdmin, updateKategori);
+router.delete('/:id', requireAdmin, deleteKategori);
 
 module.exports = router;

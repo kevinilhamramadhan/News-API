@@ -16,11 +16,11 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  
+
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
-  
+
   next();
 });
 
@@ -51,9 +51,25 @@ app.use((req, res) => {
 // Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
+
+  // Handle specific error types
+  if (err.status === 401) {
+    return res.status(401).json({
+      success: false,
+      message: 'Autentikasi diperlukan. Silakan login terlebih dahulu.'
+    });
+  }
+
+  if (err.status === 403) {
+    return res.status(403).json({
+      success: false,
+      message: 'Akses ditolak. Anda tidak memiliki izin untuk melakukan operasi ini.'
+    });
+  }
+
+  res.status(err.status || 500).json({
     success: false,
-    message: 'Terjadi kesalahan pada server',
+    message: err.message || 'Terjadi kesalahan pada server',
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
 });

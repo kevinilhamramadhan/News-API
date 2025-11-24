@@ -4,12 +4,12 @@ const supabase = require('../config/supabaseClient');
 // Get semua berita dengan filter dan pagination
 const getAllBerita = async (req, res) => {
   try {
-    const { 
-      page = 1, 
-      limit = 10, 
-      kategori, 
+    const {
+      page = 1,
+      limit = 10,
+      kategori,
       status = 'published',
-      search 
+      search
     } = req.query;
 
     const offset = (page - 1) * limit;
@@ -22,6 +22,11 @@ const getAllBerita = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `, { count: 'exact' });
 
@@ -73,7 +78,7 @@ const getAllBerita = async (req, res) => {
 const getBeritaById = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const { data, error } = await supabase
       .from('berita')
       .select(`
@@ -82,6 +87,11 @@ const getBeritaById = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `)
       .eq('id', id)
@@ -120,7 +130,7 @@ const getBeritaById = async (req, res) => {
 const getBeritaBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    
+
     const { data, error } = await supabase
       .from('berita')
       .select(`
@@ -129,6 +139,11 @@ const getBeritaBySlug = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `)
       .eq('slug', slug)
@@ -178,6 +193,11 @@ const getBeritaByKategori = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `, { count: 'exact' })
       .eq('kategori_id', kategoriId)
@@ -220,6 +240,11 @@ const getBeritaPopuler = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `)
       .eq('status', 'published')
@@ -245,11 +270,11 @@ const getBeritaPopuler = async (req, res) => {
 // Create berita baru
 const createBerita = async (req, res) => {
   try {
-    const { 
-      judul, 
-      slug, 
-      konten, 
-      ringkasan, 
+    const {
+      judul,
+      slug,
+      konten,
+      ringkasan,
       gambar_url,
       penulis,
       kategori_id,
@@ -271,7 +296,8 @@ const createBerita = async (req, res) => {
       gambar_url,
       penulis,
       kategori_id,
-      status
+      status,
+      author_id: req.user?.id // Set author dari authenticated user
     };
 
     // Set published_at jika status published
@@ -288,6 +314,11 @@ const createBerita = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `)
       .single();
@@ -312,11 +343,11 @@ const createBerita = async (req, res) => {
 const updateBerita = async (req, res) => {
   try {
     const { id } = req.params;
-    const { 
-      judul, 
-      slug, 
-      konten, 
-      ringkasan, 
+    const {
+      judul,
+      slug,
+      konten,
+      ringkasan,
       gambar_url,
       penulis,
       kategori_id,
@@ -349,6 +380,11 @@ const updateBerita = async (req, res) => {
           id,
           nama,
           slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
         )
       `)
       .single();

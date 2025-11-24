@@ -29,7 +29,7 @@ const getAllKategori = async (req, res) => {
 const getKategoriById = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const { data, error } = await supabase
       .from('kategori_berita')
       .select('*')
@@ -63,7 +63,7 @@ const getKategoriById = async (req, res) => {
 const getKategoriBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    
+
     const { data, error } = await supabase
       .from('kategori_berita')
       .select('*')
