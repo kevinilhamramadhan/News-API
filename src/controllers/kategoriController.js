@@ -4,16 +4,32 @@ const supabase = require('../config/supabaseClient');
 // Get semua kategori
 const getAllKategori = async (req, res) => {
   try {
-    const { data, error } = await supabase
+    // Get all kategori
+    const { data: kategoris, error: kategoriError } = await supabase
       .from('kategori')
       .select('*')
       .order('nama', { ascending: true });
 
-    if (error) throw error;
+    if (kategoriError) throw kategoriError;
+
+    // Get count of berita for each kategori
+    const kategoriWithCounts = await Promise.all(
+      kategoris.map(async (kategori) => {
+        const { count, error: countError } = await supabase
+          .from('berita')
+          .select('*', { count: 'exact', head: true })
+          .eq('kategori_id', kategori.id);
+
+        return {
+          ...kategori,
+          berita_count: countError ? 0 : count
+        };
+      })
+    );
 
     res.status(200).json({
       success: true,
-      data: data,
+      data: kategoriWithCounts,
       message: 'Kategori berhasil diambil'
     });
   } catch (error) {
