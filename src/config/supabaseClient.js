@@ -10,6 +10,12 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error('Supabase URL dan Key harus diset di file .env');
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false
+  }
+});
 
 module.exports = supabase;
