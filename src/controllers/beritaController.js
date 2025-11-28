@@ -45,10 +45,17 @@ const getAllBerita = async (req, res) => {
       query = query.or(`judul.ilike.%${search}%,konten.ilike.%${search}%`);
     }
 
-    // Pagination dan sorting
-    query = query
-      .order('published_at', { ascending: false })
-      .range(offset, offset + limit - 1);
+    // Sorting - support 'newest' and 'popular'
+    const { sort = 'newest' } = req.query;
+    if (sort === 'popular') {
+      query = query.order('views', { ascending: false });
+    } else {
+      // Default: newest first
+      query = query.order('published_at', { ascending: false });
+    }
+
+    // Pagination
+    query = query.range(offset, offset + limit - 1);
 
     const { data, error, count } = await query;
 
