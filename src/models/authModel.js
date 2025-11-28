@@ -23,14 +23,16 @@ const authModel = {
 
             if (authError) throw authError;
 
-            // Create profile in users table
+            // Create or update profile in users table (UPSERT to handle triggers)
             const { data: profile, error: profileError } = await supabase
                 .from('users')
-                .insert({
+                .upsert({
                     id: authData.user.id,
                     email: email,
                     full_name: fullName,
                     role: 'user'
+                }, {
+                    onConflict: 'id'
                 })
                 .select()
                 .single();
