@@ -24,6 +24,7 @@ const authModel = {
             if (authError) throw authError;
 
             // Create or update profile in users table (UPSERT to handle triggers)
+            // Service role key automatically bypasses RLS
             const { data: profile, error: profileError } = await supabase
                 .from('users')
                 .upsert({
@@ -31,8 +32,6 @@ const authModel = {
                     email: email,
                     full_name: fullName,
                     role: 'user'
-                }, {
-                    onConflict: 'id'
                 })
                 .select()
                 .single();
