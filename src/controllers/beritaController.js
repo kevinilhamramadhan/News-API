@@ -267,6 +267,70 @@ const getBeritaPopuler = async (req, res) => {
   }
 };
 
+// Get featured berita (untuk homepage carousel)
+const getFeaturedBerita = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('berita')
+      .select(`
+        *,
+        kategori_berita:kategori_id (
+          id,
+          nama,
+          slug
+        ),
+        users!berita_author_id_fkey (
+          full_name,
+          email,
+          avatar_url
+        )
+      `)
+      .eq('status', 'published')
+      .eq('is_featured', true)
+      .order('created_at', { ascending: false })
+      .limit(5);
+
+    if (error) throw error;
+
+    res.status(200).json({
+      success: true,
+      data: data || [],
+      message: 'Berita unggulan berhasil diambil'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Gagal mengambil berita unggulan',
+      error: error.message
+    });
+  }
+};
+
+// Increment views counter
+const incrementViews = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Call database function to increment views
+    const { error } = await supabase
+      .rpc('increment_berita_views', { berita_id: id });
+
+    if (error) throw error;
+
+    res.status(200).json({
+      success: true,
+      message: 'Views berhasil ditambah'
+    });
+  } catch (error) {
+    console.error('Increment views error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Gagal menambah views',
+      error: error.message
+    });
+  }
+};
+
 // Create berita baru
 const createBerita = async (req, res) => {
   try {
@@ -443,6 +507,8 @@ module.exports = {
   getBeritaBySlug,
   getBeritaByKategori,
   getBeritaPopuler,
+  getFeaturedBerita,
+  incrementViews,
   createBerita,
   updateBerita,
   deleteBerita

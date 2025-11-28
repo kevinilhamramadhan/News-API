@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const beritaRoutes = require('./routes/beritaRoutes');
 const kategoriRoutes = require('./routes/kategoriRoutes');
+const authRoutes = require('./routes/authRoutes');
+const bookmarkRoutes = require('./routes/bookmarkRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,14 +33,18 @@ app.get('/', (req, res) => {
     message: 'API Berita - Server berjalan dengan baik',
     version: '1.0.0',
     endpoints: {
+      auth: '/api/auth',
       berita: '/api/berita',
-      kategori: '/api/kategori'
+      kategori: '/api/kategori',
+      bookmarks: '/api/bookmarks'
     }
   });
 });
 
+app.use('/api/auth', authRoutes);
 app.use('/api/berita', beritaRoutes);
 app.use('/api/kategori', kategoriRoutes);
+app.use('/api/bookmarks', bookmarkRoutes);
 
 // 404 Handler
 app.use((req, res) => {
@@ -89,5 +95,5 @@ app.listen(PORT, () => {
 ║   └─ /api/kategori                        ║
 ║                                           ║
 ╚═══════════════════════════════════════════╝
-  `);
+`);
 });

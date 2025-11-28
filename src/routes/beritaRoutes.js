@@ -7,6 +7,8 @@ const {
   getBeritaBySlug,
   getBeritaByKategori,
   getBeritaPopuler,
+  getFeaturedBerita,
+  incrementViews,
   createBerita,
   updateBerita,
   deleteBerita
@@ -16,9 +18,13 @@ const { requireAdmin } = require('../middleware/authMiddleware');
 // Public routes (GET - anyone can read)
 router.get('/', getAllBerita);
 router.get('/populer', getBeritaPopuler);
+router.get('/featured', getFeaturedBerita);
 router.get('/kategori/:kategoriId', getBeritaByKategori);
 router.get('/:id', getBeritaById);
 router.get('/slug/:slug', getBeritaBySlug);
+
+// Views increment
+router.post('/:id/view', incrementViews);
 
 // Protected routes (POST, PUT, DELETE - admin only)
 router.post('/', requireAdmin, createBerita);
