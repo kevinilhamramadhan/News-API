@@ -5,6 +5,7 @@ const beritaRoutes = require('./routes/beritaRoutes');
 const kategoriRoutes = require('./routes/kategoriRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bookmarkRoutes = require('./routes/bookmarkRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,7 +37,8 @@ app.get('/', (req, res) => {
       auth: '/api/auth',
       berita: '/api/berita',
       kategori: '/api/kategori',
-      bookmarks: '/api/bookmarks'
+      bookmarks: '/api/bookmarks',
+      upload: '/api/upload'
     }
   });
 });
@@ -45,6 +47,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/berita', beritaRoutes);
 app.use('/api/kategori', kategoriRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // 404 Handler
 app.use((req, res) => {
