@@ -30,8 +30,8 @@ const getAllBerita = async (req, res) => {
         )
       `, { count: 'exact' });
 
-    // Filter by status
-    if (status) {
+    // Filter by status (skip if 'all' for admin view)
+    if (status && status !== 'all') {
       query = query.eq('status', status);
     }
 
