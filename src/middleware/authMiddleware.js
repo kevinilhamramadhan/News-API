@@ -1,4 +1,3 @@
-```javascript
 // src/middleware/authMiddleware.js
 const supabase = require('../config/supabaseClient');
 const jwt = require('jsonwebtoken');
