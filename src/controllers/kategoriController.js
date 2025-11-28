@@ -5,7 +5,7 @@ const supabase = require('../config/supabaseClient');
 const getAllKategori = async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('kategori_berita')
+      .from('kategori')
       .select('*')
       .order('nama', { ascending: true });
 
@@ -31,7 +31,7 @@ const getKategoriById = async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await supabase
-      .from('kategori_berita')
+      .from('kategori')
       .select('*')
       .eq('id', id)
       .single();
@@ -65,7 +65,7 @@ const getKategoriBySlug = async (req, res) => {
     const { slug } = req.params;
 
     const { data, error } = await supabase
-      .from('kategori_berita')
+      .from('kategori')
       .select('*')
       .eq('slug', slug)
       .single();
@@ -106,7 +106,7 @@ const createKategori = async (req, res) => {
     }
 
     const { data, error } = await supabase
-      .from('kategori_berita')
+      .from('kategori')
       .insert([{ nama, slug, deskripsi }])
       .select()
       .single();
@@ -139,7 +139,7 @@ const updateKategori = async (req, res) => {
     if (deskripsi !== undefined) updateData.deskripsi = deskripsi;
 
     const { data, error } = await supabase
-      .from('kategori_berita')
+      .from('kategori')
       .update(updateData)
       .eq('id', id)
       .select()
@@ -174,7 +174,7 @@ const deleteKategori = async (req, res) => {
     const { id } = req.params;
 
     const { error } = await supabase
-      .from('kategori_berita')
+      .from('kategori')
       .delete()
       .eq('id', id);
 
