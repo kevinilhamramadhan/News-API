@@ -45,10 +45,12 @@ const getAllBerita = async (req, res) => {
       query = query.or(`judul.ilike.%${search}%,konten.ilike.%${search}%`);
     }
 
-    // Sorting - support 'newest' and 'popular'
+    // Sorting - support 'newest', 'oldest', and 'popular'
     const { sort = 'newest' } = req.query;
     if (sort === 'popular') {
       query = query.order('views', { ascending: false });
+    } else if (sort === 'oldest') {
+      query = query.order('published_at', { ascending: true });
     } else {
       // Default: newest first
       query = query.order('published_at', { ascending: false });
