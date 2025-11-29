@@ -8,6 +8,7 @@ const getAllBerita = async (req, res) => {
       page = 1,
       limit = 10,
       kategori,
+      kategori_id,
       status = 'published',
       search
     } = req.query;
@@ -35,9 +36,10 @@ const getAllBerita = async (req, res) => {
       query = query.eq('status', status);
     }
 
-    // Filter by kategori
-    if (kategori) {
-      query = query.eq('kategori_id', kategori);
+    // Filter by kategori (support both 'kategori' and 'kategori_id' parameters)
+    const kategoriFilter = kategori_id || kategori;
+    if (kategoriFilter) {
+      query = query.eq('kategori_id', kategoriFilter);
     }
 
     // Search by judul atau konten
