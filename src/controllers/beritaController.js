@@ -52,10 +52,10 @@ const getAllBerita = async (req, res) => {
     if (sort === 'popular') {
       query = query.order('views', { ascending: false });
     } else if (sort === 'oldest') {
-      query = query.order('published_at', { ascending: true });
+      query = query.order('created_at', { ascending: true });
     } else {
       // Default: newest first
-      query = query.order('published_at', { ascending: false });
+      query = query.order('created_at', { ascending: false });
     }
 
     // Pagination
