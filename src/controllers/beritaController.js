@@ -108,6 +108,15 @@ const getBeritaById = async (req, res) => {
       .eq('id', id)
       .single();
 
+    // Handle not found error specifically (PGRST116: 0 rows)
+    if (error && error.code === 'PGRST116') {
+      return res.status(404).json({
+        success: false,
+        message: 'Berita tidak ditemukan'
+      });
+    }
+
+    // Handle other errors
     if (error) throw error;
 
     if (!data) {
