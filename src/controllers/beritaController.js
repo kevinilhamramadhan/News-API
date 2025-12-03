@@ -446,6 +446,7 @@ const updateBerita = async (req, res) => {
     if (gambar_url !== undefined) updateData.gambar_url = gambar_url;
     if (penulis) updateData.penulis = penulis;
     if (kategori_id !== undefined) updateData.kategori_id = kategori_id;
+    if (req.body.is_featured !== undefined) updateData.is_featured = req.body.is_featured;
     if (status) {
       updateData.status = status;
       // Set published_at jika status berubah menjadi published
