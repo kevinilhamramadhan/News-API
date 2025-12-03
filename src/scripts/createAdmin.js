@@ -2,7 +2,7 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const API_URL = process.env.API_URL || 'http://localhost:3000';
+const API_URL = process.env.API_URL;
 
 /**
  * Create admin user for seeding
