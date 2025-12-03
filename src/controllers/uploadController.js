@@ -46,8 +46,6 @@ const uploadController = {
             const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
             const filePath = fileName;
 
-            console.log('[uploadImage] Uploading file:', { fileName, size: file.size, type: file.mimetype });
-
             // Upload to Supabase Storage
             const { error: uploadError } = await supabase.storage
                 .from(bucket)
@@ -66,8 +64,6 @@ const uploadController = {
             const { data: { publicUrl } } = supabase.storage
                 .from(bucket)
                 .getPublicUrl(filePath);
-
-            console.log('[uploadImage] Upload successful:', publicUrl);
 
             res.status(201).json({
                 success: true,
