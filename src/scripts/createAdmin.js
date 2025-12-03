@@ -8,8 +8,8 @@ const API_URL = process.env.API_URL;
  * Create admin user for seeding
  */
 async function createAdmin() {
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@berita.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminEmail = 'admin@berita.com';
+    const adminPassword = 'admin123';
     const adminName = 'Administrator';
 
     console.log('🔧 Creating admin user...\n');
