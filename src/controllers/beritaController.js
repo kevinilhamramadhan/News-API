@@ -126,15 +126,10 @@ const getBeritaById = async (req, res) => {
       });
     }
 
-    // Increment views
-    await supabase
-      .from('berita')
-      .update({ views: data.views + 1 })
-      .eq('id', id);
-
+    // Don't auto-increment views here - use dedicated endpoint instead
     res.status(200).json({
       success: true,
-      data: { ...data, views: data.views + 1 },
+      data: data,
       message: 'Berita berhasil diambil'
     });
   } catch (error) {
@@ -178,15 +173,10 @@ const getBeritaBySlug = async (req, res) => {
       });
     }
 
-    // Increment views
-    await supabase
-      .from('berita')
-      .update({ views: data.views + 1 })
-      .eq('slug', slug);
-
+    // Don't auto-increment views here - use dedicated endpoint instead
     res.status(200).json({
       success: true,
-      data: { ...data, views: data.views + 1 },
+      data: data,
       message: 'Berita berhasil diambil'
     });
   } catch (error) {
@@ -337,8 +327,18 @@ const incrementViews = async (req, res) => {
 
     if (error) throw error;
 
+    // Fetch the updated berita to get the new view count
+    const { data: berita, error: fetchError } = await supabase
+      .from('berita')
+      .select('views')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) throw fetchError;
+
     res.status(200).json({
       success: true,
+      data: { views: berita.views },
       message: 'Views berhasil ditambah'
     });
   } catch (error) {
