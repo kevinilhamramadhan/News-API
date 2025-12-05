@@ -16,12 +16,14 @@ const {
 const { requireAdmin } = require('../middleware/authMiddleware');
 
 // Public routes (GET - anyone can read)
+// IMPORTANT: Static routes must come before dynamic routes
 router.get('/', getAllBerita);
 router.get('/populer', getBeritaPopuler);
 router.get('/featured', getFeaturedBerita);
 router.get('/kategori/:kategoriId', getBeritaByKategori);
-router.get('/:id', getBeritaById);
 router.get('/slug/:slug', getBeritaBySlug);
+// Dynamic route - must be last to avoid catching static routes
+router.get('/:id', getBeritaById);
 
 // Views increment
 router.post('/:id/view', incrementViews);
